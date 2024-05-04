@@ -5,7 +5,7 @@ class Media:
         self.requestedBy = requestedBy
 
     def __str__(self):
-        return f"Title: {self.title}\nStatus: {self.status}\n"
+        return f"Title: {self.title}\nStatus: {self.status}"
     
     def fromDict(self, d):
         for k, v in d.items():

@@ -1,26 +1,28 @@
 # This example requires the 'message_content' intent.
 
 import discord
+from discord.ext import commands
 from dotenv import dotenv_values
-from my_db import *
+import my_db
 
 config = dotenv_values(".env")
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix='$', intents=intents)
 
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
+@bot.command()
+async def all(ctx):
+    print("[CMD] Get all media.")
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+    media = my_db.readAllMedia()
+    strVal = ""
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    for m in media:
+        strVal = strVal +  str(m) + "\n"
 
-client.run(config["TOKEN"])
+    await ctx.send(strVal)
+
+
+bot.run(config["TOKEN"])

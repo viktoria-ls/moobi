@@ -15,7 +15,7 @@ media_ref = db.collection('Media')
 
 def createMedia(media):
     media_ref.add(media.toDict())
-    print(f"Added:\n{media}")
+    print(f"[DB] Added:\n{media}")
 
 def readAllMedia():
     docs = media_ref.stream()
@@ -25,36 +25,34 @@ def readAllMedia():
         new_media = Media()
         new_media.fromDict(doc.to_dict())
         media.append(new_media)
-        print(new_media)
+        print(f"[DB] {new_media}")
 
     return list(media)
 
 def readMediaByTitle(title):
     result = media_ref.where(filter=FieldFilter("title", "==", title)).get()
     if(len(result) == 0):
-        print(f"No media matching \"{title}\".")
+        print(f"[DB] No media matching \"{title}\".")
     else:
         media = Media()
         media.fromDict(result[0].to_dict())
-        print(media)
+        print(f"[DB] {media}")
 
         return media
 
 def updateMediaStatus(docId, status):
     valid_statuses = ['not started', 'in progress', 'finished']
     if status not in valid_statuses:
-        print(f"\"{status}\" is an invalid status.")
+        print(f"[DB] \"{status}\" is an invalid status.")
     else:
         media_ref.document(docId).update({'status': status})
-        print(f"Set status to {status}.")
+        print(f"[DB] Set status to {status}.")
 
 def deleteMedia(docId):
     doc = media_ref.document(docId).get()
 
     if doc.exists:
-        print(f"Deleting Media with ID: \"{docId}\".")
+        print(f"[DB] Deleting Media with ID: \"{docId}\".")
         media_ref.document(docId).delete()
     else:
-        print(f"Cannot delete. Media with ID: \"{docId}\" does not exist.")
-
-deleteMedia("G0gmI85Tom9VAPrdymA6")
+        print(f"[DB] Cannot delete. Media with ID: \"{docId}\" does not exist.")
