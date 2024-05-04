@@ -56,3 +56,5 @@ def deleteMedia(docId):
         media_ref.document(docId).delete()
     else:
         print(f"[DB] Cannot delete. Media with ID: \"{docId}\" does not exist.")
+
+# TODO: Functions for watchlists
